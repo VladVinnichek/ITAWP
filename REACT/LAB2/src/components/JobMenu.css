@@ -1,0 +1,33 @@
+.job-selector, .job-menu {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.job-selector select {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+.job-menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.job-menu li {
+  margin: 10px 0;
+}
+
+.job-menu a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.job-menu a:hover {
+  text-decoration: underline;
+}
