@@ -1,0 +1,50 @@
+.product-catalog {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.product-catalog h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.product-catalog table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.product-catalog th, .product-catalog td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.product-catalog th {
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
+
+.product-catalog th:hover {
+  background-color: #e6e6e6;
+}
+
+.low-stock {
+  background-color: #fffacd;
+}
+
+.out-of-stock {
+  background-color: #ffcccc;
+}
+
+.totals {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.totals p {
+  margin: 5px 0;
+}
