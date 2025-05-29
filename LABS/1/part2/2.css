@@ -1,0 +1,37 @@
+body {
+    font-family: "Courier New", monospace;
+}
+
+h1 {
+    font-family: "Times New Roman", serif;
+}
+
+ol {
+    list-style-type: none; /* Отключаем стандартную нумерацию */
+    counter-reset: section; /* Создаём счетчик для основного списка */
+}
+
+ol > li {
+    counter-increment: section; /* Увеличиваем счетчик */
+}
+
+ol > li::before {
+    content: counter(section) ") "; /* Добавляем номер со скобкой */
+    font-weight: normal; /* Жирный текст (по желанию) */
+}
+
+ol[type="a"] > li {
+    counter-increment: subsection;
+}
+
+ol[type="a"] > li::before {
+    content: counter(subsection, lower-alpha) ") ";
+}
+
+ol[type="a"][start="3"] {
+    counter-reset: subsection 2; /* Начинаем с 3 (но пишем 2, т.к. первый элемент будет +1) */
+}
+
+ol[type="a"][start="3"] > li::before {
+    content: counter(subsection, lower-alpha) " ";
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница 1</title>
+    <link rel="stylesheet" href="Page2.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="Index.html">Главная</a></li>
+				<li><a href="Page4.html">Margin</a></li>
+            </ul>
+        </nav>
+    </header>
+    <h1>Тег &lta&gt</h1>
+    <div>
+        <div class="content">
+            <div class="column">
+                <p><img src="2page.png" style="float: left; max-width: 40%; height: auto;" alt="Описание изображения"> Тег <span class="blue">&lta&gt</span> является одним из важных элементов HTML и предназначен для создания ссылок. В зависимости от присутствия атрибутов <span class="red">name</span> или <span class="red">href</span> тег <span class="blue">&lta&gt</span> устанавливает ссылку или якорь. Якорем называется закладка внутри страницы, которую можно указать в качестве цели ссылки. При использовании ссылки, которая указывает на якорь, происходит переход к закладке внутри веб-страницы.</p>
+				<p>Для создания ссылки необходимо сообщить браузеру, что является ссылкой, а также указать адрес документа, на который следует сделать ссылку. В качестве значения атрибута <span class="red">href</span> используется адрес документа (URL, Universal Resource Locator, универсальный указатель ресурсов), на который происходит переход.
+                Адрес ссылки может быть абсолютным и относительным. Абсолютные адреса работают везде и всюду независимо от имени сайта или веб-страницы, где прописана ссылка. Относительные ссылки, как следует из их названия, построены относительно текущего документа или корня сайта.</p>
+			</div>
+        </div>
+    </div>
+    <p class="content"><b>Атрибуты ссылки</b></p>
+    <ul>
+        <li><a href="https://htmlbook.ru/html/a/accesskey">accesskey</a> – активация ссылки с помощью комбинации клавиш.</li>
+        <li><a href="https://htmlbook.ru/html/a/coords">coords</a> – устанавливает координаты активной области.</li>
+        <li><a href="http://htmlbook.ru/html/a/download">download</a> – предлагает скачать указанный по ссылке файл.</li>
+        <li><a href="http://htmlbook.ru/html/a/href">href</a> – задает адрес документа, на который следует перейти.</li>
+        <li><a href="http://htmlbook.ru/html/a/hreflang">hreflang</a> – идентифицирует язык текста по ссылке.</li>
+        <li><a href="http://htmlbook.ru/html/a/name">name</a> – устанавливает имя якоря внутри документа.</li>
+        <li><a href="http://htmlbook.ru/html/a/rel">rel</a> – отношения между ссылаемым и текущим документами.</li>
+        <li><a href="http://htmlbook.ru/html/a/rev">rev</a> – отношения между текущим и ссылаемым документами.</li>
+        <li><a href="http://htmlbook.ru/html/a/shape">shape</a> – задает форму активной области ссылки для изображений.</li>
+        <li><a href="http://htmlbook.ru/html/a/tabindex">tabindex</a> – определяет последовательность перехода между ссылками при нажатии на кнопку Tab.</li>
+        <li><a href="http://htmlbook.ru/html/a/target">target</a> – имя окна или фрейма, куда браузер будет загружать документ.</li>
+        <li><a href="http://htmlbook.ru/html/a/title">title</a> – добавляет всплывающую подсказку к тексту ссылки.</li>
+        <li><a href="http://htmlbook.ru/html/a/type">type</a> – указывает MIME-тип документа, на который ведёт ссылка.</li>
+    </ul>
+    <p style="text-align: center;">Поддержка</p>
+    <table>
+        <thead>
+            <tr>
+                <th>IE</th>
+                <th>Chrome</th>
+                <th>Opera</th>
+                <th>Safari</th>
+                <th>Firefox</th>
+                <th>Android</th>
+                <th>iOS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1.0+</td>
+                <td>1.0+</td>
+                <td>2.1+</td>
+                <td>1.0+</td>
+                <td>1.0+</td>
+                <td>1.0+</td>
+                <td>1.0+</td>
+            </tr>
+        </tbody>
+    </table>
+    <aside class="AD" id="AD">
+        <button class="close-btn" onclick="closeAd()">×</button>
+        <h4>Рекламный блок</h4>
+        <p>Здесь будет размещена ваша реклама.</p>
+        <img src="AD.png" alt="Рекламное изображение" style="width: 100%; height: auto; border-radius: 20px;">
+    </aside>
+    <script>
+        function closeAd() {
+            document.getElementById('AD').style.display = 'none'; // Скрываем рекламный блок
+        }
+    </script>
+    <footer>
+        <p>Винничек В.Ю. АСОИ-221</p>
+    </footer>
+</body>
+</html>

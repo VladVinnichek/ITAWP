@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Получение данных</title>
+    <script>
+        function getUserDetails() {
+            const surname = prompt("Введите свою фамилию:");
+            const gender = prompt("Введите свой пол:");
+            const age = prompt("Введите свой возраст:");
+
+            const confirmation = confirm(`ФИО: ${surname}\nПол: ${gender}\nВозраст: ${age}\nВсе верно?`);
+
+            if (confirmation) {
+                alert(`Молодец, ${surname}!`);
+                getCircleArea();
+            } else {
+                alert("Ошибка в данных");
+                getUserDetails(); 
+            }
+        }
+        window.onload = getUserDetails;
+    </script>
+</html>

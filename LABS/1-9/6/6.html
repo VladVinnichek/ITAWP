@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Известные Люди</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+    }
+
+    nav {
+      background: white;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+      margin-right: 20px;
+      display: flex;
+      align-items: center;
+      height: 250px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 10px;
+      width: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    nav ul li {
+      position: relative;
+      padding: 10px;
+      text-align: center;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: black;
+      display: block;
+    }
+
+    nav ul li img {
+      position: absolute;
+      left: -25px;
+      top: 50%;
+      transform: translateY(-50%);
+      max-height: 20px;
+    }
+
+    .hide {
+      visibility: hidden;
+    }
+
+    .image-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .image-container img {
+      height: 250px;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <ul>
+        <li>
+          <img src="Arrow.png" class="hide" alt="Arrow" />
+          <a href="#" data-img="images/Pushkin1.png" data-images='["images/Pushkin1.png","images/Pushkin2.png"]'>Пушкин</a>
+        </li>
+        <li>
+          <img src="Arrow.png" class="hide" alt="Arrow" />
+          <a href="#" data-img="images/Tolstoy1.png" data-images='["images/Tolstoy1.png","images/Tolstoy2.png"]'>Толстой</a>
+        </li>
+        <li>
+          <img src="Arrow.png" class="hide" alt="Arrow" />
+          <a href="#" data-img="images/Gogol1.png" data-images='["images/Gogol1.png","images/Gogol2.png"]'>Гоголь</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="image-container">
+      <img id="displayedImage" />
+    </div>
+  </div>
+
+	  <script>
+	  const navItems = document.querySelectorAll("nav > ul > li");
+	  const displayedImage = document.getElementById("displayedImage");
+	  let currentIndex = 0;
+	  let currentImages = [];
+	  let imageChangeInterval;
+	  let hoverTimeout;
+
+	  navItems.forEach((item) => {
+		item.onmouseover = () => {
+		  item.firstElementChild.classList.remove("hide");
+		};
+
+		item.onmouseout = () => {
+		  item.firstElementChild.classList.add("hide");
+		  stopImageChange();
+		};
+
+		item.querySelector("a").onclick = function (event) {
+		  event.preventDefault();
+		  const imgSrc = this.getAttribute("data-img");
+		  displayedImage.src = imgSrc;
+		  currentImages = JSON.parse(this.getAttribute("data-images"));
+		  currentIndex = 0;
+		  stopImageChange(); // сброс перед новой установкой
+		};
+	  });
+
+	  displayedImage.onmouseover = () => {
+		hoverTimeout = setTimeout(() => {
+		  startImageChange();
+		}, 1000); // задержка 1 секунда
+	  };
+
+	  displayedImage.onmouseout = () => {
+		clearTimeout(hoverTimeout); // отменяем задержку, если курсор ушёл раньше
+		stopImageChange();
+	  };
+
+	  function startImageChange() {
+		stopImageChange(); // очищаем предыдущий интервал
+		changeImage();     // сразу показываем первое из чередующихся изображений
+		imageChangeInterval = setInterval(changeImage, 1000);
+	  }
+
+	  function stopImageChange() {
+		clearInterval(imageChangeInterval);
+		clearTimeout(hoverTimeout);
+	  }
+
+	  function changeImage() {
+		if (currentImages.length > 0) {
+		  displayedImage.src = currentImages[currentIndex];
+		  currentIndex = (currentIndex + 1) % currentImages.length;
+		}
+	  }
+	</script>
+
+</body>
+</html>

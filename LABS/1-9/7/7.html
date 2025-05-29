@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Расчет отпусков</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .employee {
+      margin-bottom: 10px;
+    }
+    input[type="date"] {
+      margin-left: 10px;
+    }
+    .section {
+      margin-top: 20px;
+    }
+    button {
+      margin-top: 10px;
+    }
+    .results {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Анкета сотрудников</h1>
+  <form id="employeeForm">
+    <div id="employees">
+      <!-- 7 сотрудников -->
+      <div class="employee">Сотрудник 1: <input type="text" placeholder="Фамилия" required>
+        <input type="date" required>
+      </div>
+      <div class="employee">Сотрудник 2: <input type="text" placeholder="Фамилия" required>
+        <input type="date" required>
+      </div>
+      <div class="employee">Сотрудник 3: <input type="text" placeholder="Фамилия" required>
+        <input type="date" required>
+      </div>
+      <div class="employee">Сотрудник 4: <input type="text" placeholder="Фамилия" required>
+        <input type="date" required>
+      </div>
+      <div class="employee">Сотрудник 5: <input type="text" placeholder="Фамилия" required>
+        <input type="date" required>
+      </div>
+      <div class="employee">Сотрудник 6: <input type="text" placeholder="Фамилия" required>
+        <input type="date" required>
+      </div>
+      <div class="employee">Сотрудник 7: <input type="text" placeholder="Фамилия" required>
+        <input type="date" required>
+      </div>
+    </div>
+
+    <div class="section">
+      <label>Месяц отпуска (число от 1 до 12): <input type="number" id="vacMonth" min="1" max="12"></label>
+    </div>
+
+    <div class="section">
+      <label>Квартал окончания отпуска (1–4): <input type="number" id="vacQuarter" min="1" max="4"></label>
+    </div>
+
+    <button type="submit">Рассчитать</button>
+  </form>
+
+  <div class="results" id="results"></div>
+
+  <script>
+  const form = document.getElementById("employeeForm");
+
+  // Восстановление сохранённых данных при загрузке
+  window.addEventListener("DOMContentLoaded", () => {
+    const savedData = JSON.parse(localStorage.getItem("vacationData"));
+    if (savedData) {
+      const employees = document.querySelectorAll(".employee");
+      employees.forEach((emp, index) => {
+        const [nameInput, dateInput] = emp.querySelectorAll("input");
+        if (savedData.employees[index]) {
+          nameInput.value = savedData.employees[index].name;
+          dateInput.value = savedData.employees[index].date;
+        }
+      });
+
+      document.getElementById("vacMonth").value = savedData.vacMonth || '';
+      document.getElementById("vacQuarter").value = savedData.vacQuarter || '';
+    }
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const employees = document.querySelectorAll(".employee");
+    const results = [];
+    const monthFilter = parseInt(document.getElementById("vacMonth").value);
+    const quarterFilter = parseInt(document.getElementById("vacQuarter").value);
+    const currentYear = new Date().getFullYear();
+
+    const monthMatches = [];
+    const quarterMatches = [];
+    const nextYearMatches = [];
+
+    const employeeData = [];
+
+    employees.forEach(emp => {
+      const [nameInput, dateInput] = emp.querySelectorAll("input");
+      const name = nameInput.value.trim();
+      const startDate = new Date(dateInput.value);
+
+      employeeData.push({ name: nameInput.value, date: dateInput.value }); // сохранить в localStorage
+
+      if (!name || isNaN(startDate)) return;
+
+      const vacationStart = new Date(startDate);
+      vacationStart.setMonth(vacationStart.getMonth() + 11);
+
+      const vacationEnd = new Date(vacationStart);
+      let addedDays = 0;
+      while (addedDays < 24) {
+        vacationEnd.setDate(vacationEnd.getDate() + 1);
+        const day = vacationEnd.getDay();
+        if (day !== 0 && day !== 6) addedDays++; // не выходной
+      }
+
+      results.push(
+        `${name}: отпуск с ${vacationStart.toLocaleDateString()} по ${vacationEnd.toLocaleDateString()}`
+      );
+
+      // фильтр по месяцу
+      const vacStartMonth = vacationStart.getMonth() + 1;
+      if (!isNaN(monthFilter) && vacStartMonth === monthFilter) {
+        monthMatches.push(name);
+      }
+
+      // фильтр по кварталу окончания
+      const vacEndMonth = vacationEnd.getMonth() + 1;
+      const quarter = Math.ceil(vacEndMonth / 3);
+      if (!isNaN(quarterFilter) && quarter === quarterFilter) {
+        quarterMatches.push(name);
+      }
+
+      // отпуск в следующем году
+      if (vacationStart.getFullYear() > currentYear) {
+        nextYearMatches.push(name);
+      }
+    });
+
+    // Сохраняем всё в localStorage
+    localStorage.setItem("vacationData", JSON.stringify({
+      employees: employeeData,
+      vacMonth: document.getElementById("vacMonth").value,
+      vacQuarter: document.getElementById("vacQuarter").value
+    }));
+
+    let output = results.join('\n') + '\n\n';
+
+    if (!isNaN(monthFilter)) {
+      output += `Сотрудники, у которых отпуск начинается в ${monthFilter}-м месяце:\n${monthMatches.join(', ') || 'Нет'}\n\n`;
+    }
+
+    if (!isNaN(quarterFilter)) {
+      output += `Сотрудники, у которых отпуск заканчивается в ${quarterFilter}-м квартале:\n${quarterMatches.join(', ') || 'Нет'}\n\n`;
+    }
+
+    output += `Сотрудники, у которых отпуск начнётся в следующем году (${currentYear + 1}):\n${nextYearMatches.join(', ') || 'Нет'}`;
+
+    document.getElementById("results").textContent = output;
+  });
+</script>
+
+</body>
+</html>

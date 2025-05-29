@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Анкета участника тестирования</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
+      background-color: #f4f4f4;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #2e8b57;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Анкета участника тестирования</h2>
+  <form id="form">
+    <label>Фамилия:
+      <input type="text" id="surname" required>
+    </label>
+
+    <label>Номер школы:
+      <input type="number" id="schoolNumber" required>
+    </label>
+
+    <label>Оценки за 6 задач (1, 2/3, 1/3 или 0):</label>
+    <div id="scores">
+      <input type="text" placeholder="Задача 1" class="score" required>
+      <input type="text" placeholder="Задача 2" class="score" required>
+      <input type="text" placeholder="Задача 3" class="score" required>
+      <input type="text" placeholder="Задача 4" class="score" required>
+      <input type="text" placeholder="Задача 5" class="score" required>
+      <input type="text" placeholder="Задача 6" class="score" required>
+    </div>
+
+    <button type="button" onclick="processForm()">Определить категорию</button>
+  </form>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function parseScore(value) {
+      switch (value.trim()) {
+        case "1": return 1;
+        case "2/3": return 2 / 3;
+        case "1/3": return 1 / 3;
+        case "0": return 0;
+        default: return null;
+      }
+    }
+
+    function processForm() {
+      const surname = document.getElementById("surname").value;
+      const school = document.getElementById("schoolNumber").value;
+      const scoreInputs = document.querySelectorAll(".score");
+      const scores = [];
+      let allValid = true;
+
+      scoreInputs.forEach(input => {
+        const score = parseScore(input.value);
+        if (score === null) {
+          allValid = false;
+        }
+        scores.push(score);
+      });
+
+      if (!allValid) {
+        document.getElementById("result").innerHTML = "Ошибка: введите допустимые значения: 0, 1/3, 2/3, 1";
+        return;
+      }
+
+      const total = scores.reduce((a, b) => a + b, 0);
+      let category = "Четвёртая категория";
+
+      const allAre = val => scores.every(s => s === val);
+      const allAtLeast = val => scores.every(s => s >= val);
+      const contains = val => scores.includes(val);
+
+      if (allAre(1)) {
+        category = "Первая категория";
+      } else if (allAtLeast(2/3) && contains(1)) {
+        category = "Вторая категория";
+      } else if (allAre(2/3)) {
+        category = "Третья категория";
+      }
+
+      document.getElementById("result").innerHTML = `
+        <strong>Фамилия:</strong> ${surname}<br>
+        <strong>Школа №:</strong> ${school}<br>
+        <strong>Баллы за задачи:</strong> ${scores.map(s => s.toFixed(2)).join(', ')}<br>
+        <strong>Сумма баллов:</strong> ${total.toFixed(2)}<br>
+        <strong>Категория:</strong> ${category}
+      `;
+    }
+  </script>
+</body>
+</html>

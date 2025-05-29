@@ -1,0 +1,66 @@
+body {
+    font-family: Times New Roman, serif;
+    text-align: left;
+    padding: 200px;
+}
+
+.center {
+    text-align: center;
+}
+
+.text10 {
+    font-size: 10pt;
+}
+
+.underline {
+	font-size: 18pt;
+    text-decoration: underline;
+}
+
+.underlinePINK {
+	font-size: 18pt;
+    text-decoration: underline;
+	color: fuchsia;
+}
+
+.left {
+    text-align: left;
+}
+
+.text14 {
+    font-size: 14pt;
+}
+
+.blue-text {
+    font-size: 20pt;
+    font-family: Arial, sans-serif;
+    color: blue;
+}
+
+.italic-text {
+    font-size: 14pt;
+    font-style: italic;
+}
+
+.image {
+	float:left;
+	padding-left: 50px;
+	width:130px;
+	height: 100px;
+}
+
+.right {
+    text-align: right;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+}
+
+.underline2 {
+    text-decoration: underline;
+}
+
+.bold-text {
+    font-weight: bold;
+}

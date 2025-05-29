@@ -1,0 +1,49 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f8f8f8;
+}
+
+.container {
+    width: 300px;
+    height: 300px;
+    border: 2px solid red;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.row {
+    display: flex;
+    width: 100%;
+}
+
+.top {
+    justify-content: flex-start;
+    gap: 60px; /* Расстояние между элементами */
+}
+
+.bottom {
+    justify-content: flex-end;
+    gap: 60px; /* Расстояние между элементами */
+}
+
+.elem {
+    width: 42px;
+    height: 42px;
+    background-image: url('1.png');
+    background-size: cover; /* Подгоняет изображение по размеру блока */
+    background-position: center; /* Центрирует изображение */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-weight: bold;
+}
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>jQuery Задание</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    header {
+      background-color: #ddd;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    img {
+      width: 150px;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.jpg" alt="Логотип">
+    <h1 id="main_h1">Пример заголовка</h1>
+  </header>
+
+  <div class="gallery">
+    <img src="moto4.png" alt="Картинка 1">
+    <img src="moto1.png" alt="Мотоцикл 1">
+    <img src="moto2.png" alt="Мотоцикл 2">
+    <img src="moto3.png" alt="Картинка 2">
+    <img src="logo.jpg" alt="Логотип дублирующий">
+  </div>
+
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <script>
+    $(document).ready(function(){
+
+      var logo1 = $('img[src*="logo.jpg"]');
+      var logo2 = $('img[src$="logo.jpg"]');
+      var logo3 = $('img').filter(function(){
+        return $(this).attr('src')?.includes('logo.jpg');
+      });
+
+      logo2.hide(3000).show(3000);
+      $('img').not(':first').hide(5000);
+
+      function changeAttrById(id, attrName, newValue) {
+        $('#' + id).attr(attrName, newValue);
+      }
+
+      changeAttrById('main_h1', 'title', 'Новый заголовок через атрибут');
+	  
+      $('img[src*="moto2.jpg"]')
+        .css('border', '1px solid #333333')
+        .animate({ borderWidth: '5px' }, 5000)
+        .promise().done(function(){
+          $('header').fadeOut(5000);
+        });
+
+      $('body')
+        .append('<p id="newparagraph">Новый абзац, добавленный jQuery</p>')
+        .find('#newparagraph')
+        .css('background-color', 'black')
+        .css('color', 'white');
+    });
+  </script>
+
+</body>
+</html>

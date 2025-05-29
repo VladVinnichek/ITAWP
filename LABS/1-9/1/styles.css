@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.company-title {
+    color: red;
+    text-align: center;
+}
+
+.logo {
+    display: block;
+    margin: 0 auto; 
+    width: 10cm; 
+    height: auto;
+}
+
+.description {
+    color: blue;
+    font-style: italic;
+    text-align: right;
+    font-size: 1.2em; 
+}
+
+.navigation {
+    text-align: right;
+}
+
+.navigation li {
+    list-style-type: circle; 
+    color: blue;
+    font-style: italic;
+    font-size: 1.2em; 
+}
+
+.product-img {
+        width: 120px;
+        height: auto;
+    }

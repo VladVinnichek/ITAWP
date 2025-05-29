@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Лабораторная №5 - Отпуск сотрудников</title>
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #f0f0f0;
+      border-radius: 10px;
+    }
+    input, select, button {
+      margin: 5px;
+      padding: 5px;
+    }
+    table, th, td {
+      border: 1px solid #999;
+      border-collapse: collapse;
+      padding: 5px;
+    }
+    th {
+      background: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Анкета сотрудников</h2>
+  <form id="employeeForm">
+    <table>
+      <tr>
+        <th>Фамилия</th>
+        <th>Дата контракта</th>
+      </tr>
+      <!-- Повторить 7 строк -->
+      <tbody id="formRows"></tbody>
+    </table>
+    <button type="button" onclick="processData()">Рассчитать отпуска</button>
+  </form>
+
+  <h3>Фильтры:</h3>
+  <label>Месяц отпуска:
+    <select id="monthFilter">
+      <option value="">--выберите--</option>
+      <option value="0">Январь</option>
+      <option value="1">Февраль</option>
+      <option value="2">Март</option>
+      <option value="3">Апрель</option>
+      <option value="4">Май</option>
+      <option value="5">Июнь</option>
+      <option value="6">Июль</option>
+      <option value="7">Август</option>
+      <option value="8">Сентябрь</option>
+      <option value="9">Октябрь</option>
+      <option value="10">Ноябрь</option>
+      <option value="11">Декабрь</option>
+    </select>
+  </label>
+
+  <label>Квартал окончания отпуска:
+    <select id="quarterFilter">
+      <option value="">--выберите--</option>
+      <option value="1">1 квартал (Янв-Мар)</option>
+      <option value="2">2 квартал (Апр-июн)</option>
+      <option value="3">3 квартал (Июл-сен)</option>
+      <option value="4">4 квартал (Окт-дек)</option>
+    </select>
+  </label>
+
+  <button onclick="applyFilters()">Применить фильтры</button>
+
+	<div id="results"></div>
+	<div id="filters"></div>
+
+  <script>
+  const employeeCount = 7;
+  const formRows = document.getElementById("formRows");
+
+  // Создание строк формы
+  for (let i = 0; i < employeeCount; i++) {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td><input type="text" required name="name${i}" placeholder="Иванов"></td>
+      <td><input type="date" required name="date${i}"></td>
+    `;
+    formRows.appendChild(row);
+  }
+
+  let results = [];
+
+  // Восстановление данных из localStorage при загрузке
+  window.addEventListener("DOMContentLoaded", () => {
+    const saved = JSON.parse(localStorage.getItem("vacationData"));
+    if (saved) {
+      for (let i = 0; i < employeeCount; i++) {
+        const nameField = document.querySelector(`[name="name${i}"]`);
+        const dateField = document.querySelector(`[name="date${i}"]`);
+        if (saved[i]) {
+          nameField.value = saved[i].name || "";
+          dateField.value = saved[i].date || "";
+        }
+      }
+
+      // Восстановим фильтры
+      if (localStorage.getItem("vacationMonth"))
+        document.getElementById("monthFilter").value = localStorage.getItem("vacationMonth");
+      if (localStorage.getItem("vacationQuarter"))
+        document.getElementById("quarterFilter").value = localStorage.getItem("vacationQuarter");
+    }
+  });
+
+  function addWorkDays(startDate, days) {
+    const date = new Date(startDate);
+    let added = 0;
+    while (added < days) {
+      date.setDate(date.getDate() + 1);
+      const day = date.getDay();
+      if (day !== 0 && day !== 6) added++; // Пропускаем выходные
+    }
+    return date;
+  }
+
+  function processData() {
+    results = [];
+    const savedData = [];
+
+    for (let i = 0; i < employeeCount; i++) {
+      const nameField = document.querySelector(`[name="name${i}"]`);
+      const dateField = document.querySelector(`[name="date${i}"]`);
+      const name = nameField.value.trim();
+      const dateStr = dateField.value;
+
+      savedData.push({ name, date: dateStr });
+
+      if (!name || !dateStr) continue;
+
+      const contractDate = new Date(dateStr);
+      const vacationStart = new Date(contractDate);
+      vacationStart.setMonth(vacationStart.getMonth() + 11);
+
+      const vacationEnd = addWorkDays(vacationStart, 24);
+
+      results.push({
+        name,
+        contractDate,
+        vacationStart,
+        vacationEnd
+      });
+    }
+
+    // Сохраняем данные в localStorage
+    localStorage.setItem("vacationData", JSON.stringify(savedData));
+
+    // Сохраняем фильтры
+    localStorage.setItem("vacationMonth", document.getElementById("monthFilter").value);
+    localStorage.setItem("vacationQuarter", document.getElementById("quarterFilter").value);
+
+    displayResults(results);
+  }
+
+  function displayResults(data) {
+    let html = "<h3>Результаты:</h3><table><tr><th>Фамилия</th><th>Дата контракта</th><th>Начало отпуска</th><th>Конец отпуска</th></tr>";
+    data.forEach(emp => {
+      html += `<tr>
+        <td>${emp.name}</td>
+        <td>${emp.contractDate.toLocaleDateString()}</td>
+        <td>${emp.vacationStart.toLocaleDateString()}</td>
+        <td>${emp.vacationEnd.toLocaleDateString()}</td>
+      </tr>`;
+    });
+    html += "</table>";
+    document.getElementById("results").innerHTML = html;
+  }
+
+  function applyFilters() {
+    const month = document.getElementById("monthFilter").value;
+    const quarter = parseInt(document.getElementById("quarterFilter").value);
+
+    // Сохраняем выбранные фильтры
+    localStorage.setItem("vacationMonth", month);
+    localStorage.setItem("vacationQuarter", isNaN(quarter) ? "" : quarter);
+
+    let resultText = "<h3>Фильтрация:</h3>";
+
+    if (month !== "") {
+      const monthEmployees = results.filter(emp =>
+        emp.vacationStart.getMonth() == parseInt(month)
+      ).map(emp => emp.name);
+      resultText += `<p><strong>Отпуск в месяце:</strong> ${monthEmployees.join(", ") || "Нет"}</p>`;
+    }
+
+    if (!isNaN(quarter)) {
+      const range = {
+        1: [0, 1, 2],
+        2: [3, 4, 5],
+        3: [6, 7, 8],
+        4: [9, 10, 11]
+      }[quarter];
+
+      const quarterEmployees = results.filter(emp =>
+        range.includes(emp.vacationEnd.getMonth())
+      ).map(emp => emp.name);
+      resultText += `<p><strong>Окончание отпуска в ${quarter} квартале:</strong> ${quarterEmployees.join(", ") || "Нет"}</p>`;
+    }
+
+    const nextYear = new Date().getFullYear() + 1;
+    const nextYearEmployees = results.filter(emp =>
+      emp.vacationStart.getFullYear() === nextYear
+    ).map(emp => emp.name);
+    resultText += `<p><strong>Отпуск в следующем году:</strong> ${nextYearEmployees.join(", ") || "Нет"}</p>`;
+
+    document.getElementById("filters").innerHTML = resultText;
+  }
+</script>
+
+
+</body>
+</html>
